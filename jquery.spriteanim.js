@@ -6,7 +6,7 @@
  * - Unlimited frames.
  * - Fast loading.
  * - Online generator.
- * 
+ *
  * Author:   Morten Skyt @ Stupid Studio ApS <morten@stupid-studio.com>
  * Website:  http://sprite.smplr.com
  * Hosting:  http://smplr.com
@@ -16,18 +16,22 @@ jQuery(function($) {
 
 	/**
 	 * Convert a string version of true/false/0/1 to a boolean. If undefined,
-	 * the default value is returned. If defined, but not true or 1, then false is
-	 * returned.
+	 * the default value (true if the function is called without a
+	 * second argument, otherwise the second argument) is returned. If defined,
+	 * but not "true" or a string containing a number above 1, return false
 	 */
 	var stringToBoolean = function(val, defValue) {
+		if typeof defValue === "undefined")
+			defValue = true;
+
 		if (typeof val === "undefined")
 			return defValue;
 
-		if (val.toLowerCase() === "true" || val === "1")
+		if (val.toLowerCase() === "true" || val >= 1)
 			return true;
+
 		return false;
 	};
-
 	/**
 	 * Convert a string with two digits, separated by x, into an array with two
 	 * values. Ie. "123x456" becomes [123,456]
@@ -68,7 +72,7 @@ jQuery(function($) {
 			blocksize: stringToCoords($(this.elem).attr('data-blocksize')),
 			frames: Number($(this.elem).attr('data-frames')),
 			fps: Number($(this.elem).attr('data-fps')),
-			
+
 			curFrame: -1
 		};
 
@@ -87,19 +91,19 @@ jQuery(function($) {
 
 		// create the dom elements and do the styling required
 		this.prepareElements();
-		
+
 		// autoload? then load the graphics
 		if (settings.autoload) {
 			this.loadSheet();
 			this.curFrame = this.getNextFrame();
 			this.showCurrentFrame();
 		}
-		
+
 		// autoplay? then play when the first frame is loaded
 		if (settings.autoplay) $(this.elem).one('sheet-0-loaded', this.play.bind(this));
 	};
-	
-	
+
+
 	/**
 	 * Get the amount of sheets.
 	 */
@@ -107,8 +111,8 @@ jQuery(function($) {
 		var perSheet = this.gridsize[0] * this.gridsize[1];
 		return Math.ceil(this.frames / perSheet);
 	};
-	
-	
+
+
 	/**
 	 * Get the current sheet index.
 	 */
@@ -116,8 +120,8 @@ jQuery(function($) {
 		var perSheet = this.gridsize[0] * this.gridsize[1];
 		return Math.floor( this.curFrame / perSheet );
 	};
-	
-	
+
+
 	/**
 	 * Return the index of the next sheet (so we can prepare the background-image
 	 * etc.)
@@ -128,7 +132,7 @@ jQuery(function($) {
 		if (nextIdx >= this.getNoSheets()) nextIdx = 0;
 		return nextIdx;
 	};
-	
+
 
 	/**
 	 * Create the animation elements and style them accordingly.
@@ -136,9 +140,9 @@ jQuery(function($) {
 	SpriteAnim.prototype.prepareElements = function() {
 		var outer = $(this.elem);
 		outer.css({'position': 'relative'});
-		
+
 		var createSheets = this.getNoSheets() > 1 ? 2 : 1;
-		
+
 		// create the two sheet divs, which will contain the sprite images
 		for (var i = 0; i < createSheets; i++) {
 			outer.append($('<div class="sheet" data-idx="' + i + '">'));
@@ -172,7 +176,7 @@ jQuery(function($) {
 	SpriteAnim.prototype.repositionSheets = function() {
 		var outer = $(this.elem);
 		var sheets = outer.children('div.sheet');
-		
+
 		var createdSheets = this.getNoSheets() > 1 ? 2 : 1;
 		sheets.eq(this.getCurSheetIdx() % createdSheets).css({ left: '0%' });
 		if (createdSheets === 2) {
@@ -187,25 +191,25 @@ jQuery(function($) {
 	SpriteAnim.prototype.loadSheet = function(sheetIdx) {
 		if (typeof sheetIdx === "undefined") sheetIdx = [0, 1];
 		if (!Array.isArray(sheetIdx)) sheetIdx = [Number(sheetIdx)];
-		
+
 		var outer = this.elem;
-		
+
 		// loaded and loading sheets states
 		if (typeof this.loadedSheets === "undefined") this.loadedSheets = {};
 		var loadedSheets = this.loadedSheets;
-		
+
 		// sheet loaded fn
 		var sheetLoadedFn = function(sheetIdx) {
 			$(outer).trigger('sheet-loaded', [ sheetIdx ]);
 			$(outer).trigger('sheet-'+sheetIdx+'-loaded', [ sheetIdx ]);
 		};
-		
+
 		// load the sheets!
 		$.each(sheetIdx, function(aI, idx) {
-			
+
 			// loaded or loading, no need to do this again
 			if (typeof loadedSheets[idx] !== "undefined") return sheetLoadedFn(idx);
-			
+
 			loadedSheets[sheetIdx] = 1;
 			$('<img>').attr('src', this.baseurl + idx + ".png").imageLoad(function() {
 				sheetLoadedFn(idx);
@@ -213,9 +217,9 @@ jQuery(function($) {
 			});
 		}.bind(this));
 	};
-	
-	
-	
+
+
+
 	/**
 	 * Return the index of the next frame in the animation. Loops around, if we're
 	 * at the end.
@@ -223,11 +227,11 @@ jQuery(function($) {
 	SpriteAnim.prototype.getNextFrame = function() {
 		var nextFrame = this.curFrame + 1;
 		if (nextFrame >= this.frames) nextFrame = 0;
-		
+
 		return nextFrame;
 	};
-	
-	
+
+
 	/**
 	 * Start playing the animation.
 	 */
@@ -236,58 +240,58 @@ jQuery(function($) {
 		var ev = $.Event('play');
 		$(this.elem).trigger(ev);
 		if (ev.isDefaultPrevented()) return;
-		
+
 		this.doPlay();
 	};
-	
-	
+
+
 	/**
 	 * Do the playing, according to the FPS.
 	 */
 	SpriteAnim.prototype.doPlay = function() {
 		// already running? then cancel that
 		window.clearInterval(this.timer);
-		
+
 		// interval in milliseconds
 		var msInterval = Math.round(1000 / this.fps);
-		
+
 		this.timer = window.setInterval(function() {
 			var nextFrame = this.getNextFrame();
-			
+
 			// event
 			var ev = $.Event('frame-'+nextFrame+'-show');
 			$(this.elem).trigger(ev);
 			if (ev.isDefaultPrevented()) return this.stop();
-			
+
 			// is the next frame last? well, that is special
 			if (nextFrame === this.frames - 1) {
 				var ev = $.Event('frame-last-show');
 				$(this.elem).trigger(ev);
 				if (ev.isDefaultPrevented()) return this.stop();
 			}
-			
-			
+
+
 			// do the actual showing
 			this.curFrame = nextFrame; // iterate frame count
 			this.showCurrentFrame();
-			
-			
+
+
 			// event
 			var ev = $.Event('frame-'+nextFrame+'-shown');
 			$(this.elem).trigger(ev);
 			if (ev.isDefaultPrevented()) return this.stop();
-			
+
 			// is the next frame last? well, that is special
 			if (nextFrame === this.frames - 1) {
 				var ev = $.Event('frame-last-shown');
 				$(this.elem).trigger(ev);
 				if (ev.isDefaultPrevented()) return this.stop();
 			}
-			
+
 		}.bind(this), msInterval);
 	};
-	
-	
+
+
 	/**
 	 * Make sure the next sheet has the correct background-image, so it's ready
 	 * for when it takes over.
@@ -298,30 +302,30 @@ jQuery(function($) {
 			'background-image': 'url("' + this.baseurl + this.getNextSheetIdx() + '.png")'
 		});
 	};
-	
-	
+
+
 	/**
 	 * Set the style of the current sheet appropriately. Make sure the right
 	 * sheet is positioned in the viewport.
 	 */
 	SpriteAnim.prototype.showCurrentFrame = function() {
 		this.repositionSheets();
-		
+
 		var frameSheetIdx = this.curFrame % (this.gridsize[0] * this.gridsize[1]);
-		
+
 		var col = frameSheetIdx % this.gridsize[0];
 		var row = Math.floor(frameSheetIdx / this.gridsize[0]);
-		
+
 		var multiplier = this.retina ? 0.5 : 1;
 
 		var bgX = Math.floor(col * this.blocksize[0] * multiplier);
 		var bgY = Math.floor(row * this.blocksize[1] * multiplier);
-		
+
 		// what is the background-size of this sheet?
 		var sheetDimensions = this.getSheetDimensions( this.getCurSheetIdx() );
-		
+
 		var sheetEl = $(this.elem).children('div.sheet').eq( this.getCurSheetIdx() % 2 );
-	
+
 		sheetEl.css({
 			'background-image': 'url("' + this.baseurl + this.getCurSheetIdx() + '.png")',
 			'background-position': bgX*-1+'px '+bgY*-1+'px',
@@ -329,11 +333,11 @@ jQuery(function($) {
 			'width': this.blocksize[0],
 			'height': this.blocksize[1]
 		});
-		
+
 		this.prepareNextSheet();
 	};
-	
-	
+
+
 	/**
 	 * Stop the animation.
 	 */
@@ -341,8 +345,8 @@ jQuery(function($) {
 		window.clearInterval( this.timer );
 		this.timer = null;
 	};
-	
-	
+
+
 	/**
 	 * Get the dimensions of the sheet given by the index.
 	 */
@@ -351,16 +355,16 @@ jQuery(function($) {
 		var startIdx = idx * perSheet;
 		var endIdx = startIdx + perSheet;
 		if (endIdx > this.frames) endIdx = this.frames;
-		
+
 		var multiplier = this.retina ? 0.5 : 1;
-		
+
 		var items = endIdx - startIdx;
 		var width = 0, height = 0;
 		if (items > this.gridsize[1]) {
 			width = this.blocksize[0] * this.gridsize[0];
 		}
 		height = this.blocksize[1] * Math.ceil( items / this.gridsize[0] );
-		
+
 		return [width*multiplier, height*multiplier];
 	};
 
@@ -373,7 +377,7 @@ jQuery(function($) {
 		if ($(elem).data('spriteanim')) return $(elem).data('spriteanim');
 		var spriteanim = new SpriteAnim(elem);
 		$(elem).data('spriteanim', spriteanim);
-		
+
 		return spriteanim;
 	};
 
@@ -390,17 +394,17 @@ jQuery(function($) {
 			switch (action) {
 				case "init":
 					break;
-				
+
 				case "stop":
 					obj.stop();
 					obj.timer = null;
 					break;
-				
+
 				case "fps":
 					obj.fps = args;
 					if (obj.timer) obj.doPlay();   // was playing
 					break;
-				
+
 				case "play":
 					obj.play();
 					break;
@@ -424,14 +428,14 @@ jQuery(function($) {
 
 
 /*
- * jquery.imageload -  reliable image load event 
+ * jquery.imageload -  reliable image load event
  *
  * Copyright (c) 2011 Jess Thrysoee (jess@thrysoee.dk)
  * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
  */
 (function($) {
 
-	// global 
+	// global
 	$.ImageLoader = function(src) {
 		var img, loader;
 
