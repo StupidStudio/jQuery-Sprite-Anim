@@ -15,20 +15,13 @@
 jQuery(function($) {
 
 	/**
-	 * Convert a string version of true/false/0/1 to a boolean. If undefined,
-	 * the default value (true if the function is called without a
-	 * second argument, otherwise the second argument) is returned. If defined,
-	 * but not "true" or a string containing a number above 1, return false
+	 * Convert a string version of true/false/0/1 to a boolean. Returns
+	 * the second argument if first argument is undefined.
 	 */
 	var stringToBoolean = function(val, defValue) {
-		if typeof defValue === "undefined")
-			defValue = true;
-
-		if (typeof val === "undefined")
-			return defValue;
-
-		if (val.toLowerCase() === "true" || val >= 1)
-			return true;
+		if (typeof defValue === "undefined") defValue = true;
+		if (typeof val === "undefined") return defValue;
+		if (val.toLowerCase() === "true" || val >= 1) return true;
 
 		return false;
 	};
