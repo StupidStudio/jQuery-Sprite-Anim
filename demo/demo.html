@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="lib/bootstrap-3.custom.min.css" />
+  </head>
+  <body>
+		
+		<div class="container">
+			<div class="row">
+				
+				<div class="col-md-12">
+					<div class="page-header">
+						<h1>Your Sprite Animation</h1>
+					</div>
+					
+					<p>
+						This is a demonstration of your sprite animation. Have fun!
+					</p>
+				</div>
+
+				<h3>
+					Example 1: Animation as data-attributes
+				</h3>
+				<p>
+					HTML:
+				</p>
+				<pre>&lt;div class='spriteanim'
+	data-baseurl='demo'
+	data-grid='2x9'
+	data-blocksize='1000x208'
+	data-frames='47'
+	data-fps='12'
+	data-autoplay='true'
+	data-autoload='true'
+	data-retina='true'&gt;
+&lt;/div&gt;</pre>
+				<div class='well'>
+					<div id='spriteanim' data-baseurl='demo' data-grid='2x9' data-blocksize='1000x208' data-frames='47' data-fps='12' data-autoplay='true' data-autoload='true' data-retina='false'></div>
+				</div>
+
+				
+				<h3>
+					Example 2: Same as above with Retina-enabled and pause at frame 46 (47th frame) for 2 seconds
+				</h3>
+				<p>
+					Javascript:
+				</p>
+				<pre>&lt;script&gt;
+	$('#spriteanim2').spriteanim().on('frame-19-shown', function() {
+		$(this).spriteanim('stop');
+		window.setTimeout(function() {
+			$(this).spriteanim('play');
+		}.bind(this), 2000)
+	});
+&lt;/script&lt;</pre>
+				<div class='well'>
+					<div id='spriteanim2' data-baseurl='demo' data-grid='2x9' data-blocksize='1000x208' data-frames='47' data-fps='12' data-autoplay='true' data-autoload='true' data-retina='true'></div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<script src="lib/jquery-1.10.2.min.js"></script>
+		<script src="lib/jquery.spriteanim.js"></script>
+		
+		<script>
+			jQuery(function($) {
+				$('#spriteanim').spriteanim();
+				
+				$('#spriteanim2').spriteanim().on('frame-46-shown', function() {
+					$(this).spriteanim('stop');
+					window.setTimeout(function() {
+						$(this).spriteanim('play');
+					}.bind(this), 2000)
+				});
+			});
+		</script>
+  </body>
+</html>
