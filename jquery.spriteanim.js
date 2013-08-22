@@ -17,6 +17,8 @@ jQuery(function($) {
 	/**
 	 * Convert a string version of true/false/0/1 to a boolean. Returns
 	 * the second argument if first argument is undefined.
+	 * Returns true if no default value (second arg) is given and the
+	 * value is undefined as well.
 	 */
 	var stringToBoolean = function(val, defValue) {
 		if (typeof defValue === "undefined") defValue = true;
