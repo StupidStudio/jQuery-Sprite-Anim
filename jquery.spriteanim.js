@@ -1,5 +1,5 @@
 /**
- * JQUERY SPRITE ANIM 0.1.2a
+ * JQUERY SPRITE ANIM 0.1.3a
  * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
@@ -366,10 +366,9 @@ jQuery(function($) {
 		var multiplier = this.retina ? 0.5 : 1;
 
 		var items = endIdx - startIdx;
-		var width = 0, height = 0;
-		if (items > this.gridsize[1]) {
-			width = this.blocksize[0] * this.gridsize[0];
-		}
+
+		var width = this.blocksize[0] * items, height = 0;
+		if (items > this.gridsize[0]) width = this.blocksize[0] * this.gridsize[0];
 		height = this.blocksize[1] * Math.ceil( items / this.gridsize[0] );
 
 		return [width*multiplier, height*multiplier];

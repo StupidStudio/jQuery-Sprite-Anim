@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.2a
+#### Version 0.1.3a
 
 ## Current state:
 
@@ -147,7 +147,7 @@ Replace `X` with a frame number, 0-indexed. Called just *after* changing to the 
 
 `X` may also be one of the same special keywords from above.
 
-**Cancelable?** No.
+**Cancelable?** Somewhat: The animation will stop playing, but the frame has changed and so does not revert to previous frame.
 
 
 ### sheet-loaded
@@ -167,6 +167,10 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 
 ## Change log
+
+###### v0.1.3a
+
+ * Fixed: Incorrect background-size calculation on small sheets.
 
 ###### v0.1.2a
 
