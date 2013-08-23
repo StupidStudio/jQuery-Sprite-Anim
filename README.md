@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.1a
+#### Version 0.1.2a
 
 ## Current state:
 
@@ -167,6 +167,10 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 
 ## Change log
+
+###### v0.1.2a
+
+ * If the element has been removed from the DOM, the animation stops itself.
 
 ###### v0.1.1a
 

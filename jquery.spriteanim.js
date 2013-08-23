@@ -1,5 +1,5 @@
 /**
- * JQUERY SPRITE ANIM 0.1.1a
+ * JQUERY SPRITE ANIM 0.1.2a
  * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
@@ -259,6 +259,10 @@ jQuery(function($) {
 		var msInterval = Math.round(1000 / this.fps);
 
 		this.timer = window.setInterval(function() {
+			// if the element no longer exist / is no longer injected in the DOM, then
+			// stop the animation
+			if(!$(this.elem).parent().length) return this.stop();
+			
 			var nextFrame = this.getNextFrame();
 
 			// event
