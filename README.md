@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1a
+#### Version 0.1.1a
 
 ## Current state:
 
@@ -164,6 +164,17 @@ Replace `X` with a sheet number, 0-indexed. A specific sprite sheet has been loa
 Please note: This may be triggered a lot, as loading occurs each time we change sprite sheet.
 
 **Cancelable?** No.
+
+
+## Change log
+
+###### v0.1.1a
+
+ * Included polyfills, tested and now works in Internet Explorer 6+.
+
+###### v0.1a
+
+ * Initial release
 
 
 ## Feature wishlist

@@ -1,6 +1,6 @@
 /**
- * JQUERY SPRITE ANIM 0.1
- * ======================
+ * JQUERY SPRITE ANIM 0.1.1a
+ * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
  * - Unlimited frames.
@@ -8,8 +8,16 @@
  * - Online generator.
  *
  * Author:   Morten Skyt @ Stupid Studio ApS <morten@stupid-studio.com>
- * Website:  http://sprite.smplr.com
- * Hosting:  http://smplr.com
+ *
+ * Sprite generator tool website:
+ *           http://sprite.smplr.com
+ *
+ * Hosting for generator tool sponsored by:
+ *           http://smplr.com
+ *
+ * Website and source code:
+ *           http://github.com/StupidStudio/jQuery-Sprite-Anim
+ *
  * License:  The MIT License (see LICENSE)
  */
 jQuery(function($) {
@@ -420,6 +428,48 @@ jQuery(function($) {
 /**
  * THIRD PARTY LIBRARIES
  */
+
+
+/**
+ * Function.prototype.bind for older browsers.
+ * 
+ * Thanks to: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+ */
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (oThis) {
+    if (typeof this !== "function") {
+      // closest thing possible to the ECMAScript 5 internal IsCallable function
+      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+    }
+
+    var aArgs = Array.prototype.slice.call(arguments, 1), 
+        fToBind = this, 
+        fNOP = function () {},
+        fBound = function () {
+          return fToBind.apply(this instanceof fNOP && oThis
+                                 ? this
+                                 : oThis,
+                               aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
+
+
+/**
+ * Array.isArray for older browsers.
+ * 
+ * Thanks to: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+ */
+if(!Array.isArray) {
+  Array.isArray = function (vArg) {
+    return Object.prototype.toString.call(vArg) === "[object Array]";
+  };
+}
 
 
 /*
