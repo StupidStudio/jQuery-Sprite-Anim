@@ -1,5 +1,5 @@
 /**
- * JQUERY SPRITE ANIM 0.1.3a
+ * JQUERY SPRITE ANIM 0.1.4a
  * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
@@ -252,13 +252,30 @@ jQuery(function($) {
 	 * Do the playing, according to the FPS.
 	 */
 	SpriteAnim.prototype.doPlay = function() {
+		var self = this;
+		
 		// already running? then cancel that
 		window.clearInterval(this.timer);
 
 		// interval in milliseconds
 		var msInterval = Math.round(1000 / this.fps);
+		var startTime = (new Date()).getTime();
 
-		this.timer = window.setInterval(function() {
+
+		var canPlayNextFrame = function() {
+			var now = (new Date()).getTime();
+			if (startTime + msInterval > now) return false;
+			
+			startTime = (new Date()).getTime();
+			return true;
+		};
+		
+
+		var animFn = (function animloop() {
+			if (self.mustStop) { self.mustStop = false; return; }
+			requestAnimFrame(animFn);
+			if (!canPlayNextFrame()) return;
+			
 			// if the element no longer exist / is no longer injected in the DOM, then
 			// stop the animation
 			if(!$(this.elem).parent().length) return this.stop();
@@ -294,8 +311,9 @@ jQuery(function($) {
 				$(this.elem).trigger(ev);
 				if (ev.isDefaultPrevented()) return this.stop();
 			}
-
-		}.bind(this), msInterval);
+		}.bind(this));
+		animFn();
+		
 	};
 
 
@@ -304,9 +322,13 @@ jQuery(function($) {
 	 * for when it takes over.
 	 */
 	SpriteAnim.prototype.prepareNextSheet = function() {
+		var newProp = 'url(' + this.baseurl + this.getNextSheetIdx() + '.png)';
 		var nextSheetEl = $(this.elem).children('div.sheet').eq( (this.getCurSheetIdx() + 1) % 2 );
+		
+		if (nextSheetEl.css('background-image') === newProp) return;
+		
 		nextSheetEl.css({
-			'background-image': 'url("' + this.baseurl + this.getNextSheetIdx() + '.png")'
+			'background-image': newProp
 		});
 	};
 
@@ -333,13 +355,20 @@ jQuery(function($) {
 
 		var sheetEl = $(this.elem).children('div.sheet').eq( this.getCurSheetIdx() % 2 );
 
-		sheetEl.css({
-			'background-image': 'url("' + this.baseurl + this.getCurSheetIdx() + '.png")',
+		var newProp = {
+			'background-image': 'url(' + this.baseurl + this.getCurSheetIdx() + '.png)',
 			'background-position': bgX*-1+'px '+bgY*-1+'px',
 			'background-size': sheetDimensions[0]+'px '+sheetDimensions[1]+'px',
 			'width': this.blocksize[0],
 			'height': this.blocksize[1]
-		});
+		};
+		
+		if (newProp['background-size'] === sheetEl.css('background-size')) delete newProp['background-size'];
+		if (newProp['background-image'] === sheetEl.css('background-image')) delete newProp['background-image'];
+		if (newProp['width'] === sheetEl.css('width')) delete newProp['width'];
+		if (newProp['height'] === sheetEl.css('height')) delete newProp['height'];
+
+		sheetEl.css(newProp);
 
 		this.prepareNextSheet();
 	};
@@ -349,8 +378,7 @@ jQuery(function($) {
 	 * Stop the animation.
 	 */
 	SpriteAnim.prototype.stop = function() {
-		window.clearInterval( this.timer );
-		this.timer = null;
+		this.mustStop = true;
 	};
 
 
@@ -555,3 +583,8 @@ if(!Array.isArray) {
 	};
 
 }(jQuery));
+
+
+// Thanks to Paul Irish
+// http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+window.requestAnimFrame = (function(){ return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function( callback ){ window.setTimeout(callback, 1000 / 60); }; })();

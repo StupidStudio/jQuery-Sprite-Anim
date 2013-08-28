@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.3a
+#### Version 0.1.4a
 
 ## Current state:
 
@@ -167,6 +167,10 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 
 ## Change log
+
+###### v0.1.4a
+
+ * Now uses requestAnimationFrame where available.
 
 ###### v0.1.3a
 
