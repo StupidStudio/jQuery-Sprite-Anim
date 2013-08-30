@@ -177,6 +177,10 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 ## Change log
 
+###### v0.1.5a
+
+ * Now supports playing backwards.
+
 ###### v0.1.4a
 
  * Now uses requestAnimationFrame where available.
