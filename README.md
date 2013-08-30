@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.4a
+#### Version 0.1.5a
 
 ## Current state:
 
@@ -63,6 +63,7 @@ data-blocksize | **Yes** |               | The size of the images. Example 500x2
 data-frames  | **Yes**  |                | How many images does this sprite animation consist of?
 data-fps     | No       | 12             | Frames per second.
 data-autoplay | No      | true           | Animation will play as soon as initialized and first image is loaded.
+data-fowards | No       | true           | Direction of animation - to play backwards, set to false.
 data-autoload | No      | true           | As soon as initialized, the first two sheets will be loaded.
 data-retina  | No       | false          | Uses background-size and resizes the element, to half size.
 
@@ -109,6 +110,14 @@ If the animation is not playing:
 Example:
 
     $('#mySpriteAnimation').spriteanim('fps', 24); // change the framerate to 24
+
+### forwards
+
+Changes the play direction of the animation. You must supply a second argument, which is a boolean.
+
+If the argument is true, the animation will play forwards. If false, it will play backwards.
+
+If the animation is not playing, it will remain not playing.
 
 ## Javascript Events
 

@@ -1,5 +1,5 @@
 /**
- * JQUERY SPRITE ANIM 0.1.4a
+ * JQUERY SPRITE ANIM 0.1.5a
  * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
@@ -75,6 +75,7 @@ jQuery(function($) {
 			blocksize: stringToCoords($(this.elem).attr('data-blocksize')),
 			frames: Number($(this.elem).attr('data-frames')),
 			fps: Number($(this.elem).attr('data-fps')),
+			forwards: stringToBoolean($(this.elem).attr('data-forwards'), true),
 
 			curFrame: -1
 		};
@@ -131,8 +132,14 @@ jQuery(function($) {
 	 */
 	SpriteAnim.prototype.getNextSheetIdx = function() {
 		var curIdx = this.getCurSheetIdx();
-		var nextIdx = curIdx + 1;
-		if (nextIdx >= this.getNoSheets()) nextIdx = 0;
+		var nextIdx;
+		if (this.forwards) {
+			var nextIdx = curIdx + 1;
+			if (nextIdx >= this.getNoSheets()) nextIdx = 0;
+		} else {
+			var nextIdx = curIdx - 1;
+			if (nextIdx < 0) nextIdx = this.getNoSheets() -1;
+		}
 		return nextIdx;
 	};
 
@@ -228,8 +235,15 @@ jQuery(function($) {
 	 * at the end.
 	 */
 	SpriteAnim.prototype.getNextFrame = function() {
-		var nextFrame = this.curFrame + 1;
-		if (nextFrame >= this.frames) nextFrame = 0;
+		var nextFrame;
+		
+		if (this.forwards) {
+			nextFrame = this.curFrame + 1;
+			if (nextFrame >= this.frames) nextFrame = 0;
+		} else {
+			nextFrame = this.curFrame - 1;
+			if (nextFrame < 0) nextFrame = this.frames-1;
+		}
 
 		return nextFrame;
 	};
@@ -323,7 +337,7 @@ jQuery(function($) {
 	 */
 	SpriteAnim.prototype.prepareNextSheet = function() {
 		var newProp = 'url(' + this.baseurl + this.getNextSheetIdx() + '.png)';
-		var nextSheetEl = $(this.elem).children('div.sheet').eq( (this.getCurSheetIdx() + 1) % 2 );
+		var nextSheetEl = $(this.elem).children('div.sheet').eq( this.getNextSheetIdx() % 2 );
 		
 		if (nextSheetEl.css('background-image') === newProp) return;
 		
@@ -441,6 +455,10 @@ jQuery(function($) {
 
 				case "play":
 					obj.play();
+					break;
+				
+				case "forwards":
+					obj.forwards = args;
 					break;
 
 				default:
