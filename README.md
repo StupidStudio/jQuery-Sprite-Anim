@@ -1,9 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.5a
-
-## Current state:
-
-__Alpha Warning__: *We currently discourage any use of this plugin in production projects, as the state is currently alpha-quality! Some of the claims below, may not be true.*
+#### Version 0.1.6
 
 ## Introduction
 
@@ -176,6 +172,11 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 
 ## Change log
+
+###### v0.1.6a
+
+ * Bugfix: prepareNextSheet reverted to 0.1.4a-version, as the last sheet preparation broke.
+
 
 ###### v0.1.5a
 
