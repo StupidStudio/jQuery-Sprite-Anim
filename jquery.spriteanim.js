@@ -1,5 +1,5 @@
 /**
- * JQUERY SPRITE ANIM 0.1.5a
+ * JQUERY SPRITE ANIM 0.1.6a
  * =========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
@@ -337,10 +337,10 @@ jQuery(function($) {
 	 */
 	SpriteAnim.prototype.prepareNextSheet = function() {
 		var newProp = 'url(' + this.baseurl + this.getNextSheetIdx() + '.png)';
-		var nextSheetEl = $(this.elem).children('div.sheet').eq( this.getNextSheetIdx() % 2 );
-		
+		var nextSheetEl = $(this.elem).children('div.sheet').eq( (this.getCurSheetIdx() + 1) % 2 );
+	
 		if (nextSheetEl.css('background-image') === newProp) return;
-		
+	
 		nextSheetEl.css({
 			'background-image': newProp
 		});
