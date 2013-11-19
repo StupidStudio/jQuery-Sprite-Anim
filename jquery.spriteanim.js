@@ -1,6 +1,6 @@
 /**
- * JQUERY SPRITE ANIM 0.1.6a
- * =========================
+ * JQUERY SPRITE ANIM 0.1.7
+ * ========================
  * A jQuery sprite animation library with:
  * - Full support for iPad/iPhone.
  * - Unlimited frames.
@@ -336,11 +336,13 @@ jQuery(function($) {
 	 * for when it takes over.
 	 */
 	SpriteAnim.prototype.prepareNextSheet = function() {
+		if (this.getNextSheetIdx() === this.getCurSheetIdx()) return;
+		
 		var newProp = 'url(' + this.baseurl + this.getNextSheetIdx() + '.png)';
-		var nextSheetEl = $(this.elem).children('div.sheet').eq( (this.getCurSheetIdx() + 1) % 2 );
-	
+		var nextSheetEl = $(this.elem).children('div.sheet').eq( this.getNextSheetIdx() % 2 );
+		
 		if (nextSheetEl.css('background-image') === newProp) return;
-	
+		
 		nextSheetEl.css({
 			'background-image': newProp
 		});
@@ -376,9 +378,10 @@ jQuery(function($) {
 			'width': this.blocksize[0],
 			'height': this.blocksize[1]
 		};
+
 		
 		if (newProp['background-size'] === sheetEl.css('background-size')) delete newProp['background-size'];
-		if (newProp['background-image'] === sheetEl.css('background-image')) delete newProp['background-image'];
+		if (sheetEl.css('background-image').search( this.baseurl + this.getCurSheetIdx() + '.png' ) !== -1) delete newProp['background-image'];
 		if (newProp['width'] === sheetEl.css('width')) delete newProp['width'];
 		if (newProp['height'] === sheetEl.css('height')) delete newProp['height'];
 

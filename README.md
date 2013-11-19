@@ -1,5 +1,6 @@
 # jQuery Sprite Anim
-#### Version 0.1.6
+#### Version 0.1.7
+
 
 ## Introduction
 
@@ -173,10 +174,14 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 ## Change log
 
+###### v0.1.7
+
+ * Bugfix: Better detection of background-image-change.
+ * Bugfix: when only one sprite-sheet is needed.
+
 ###### v0.1.6a
 
  * Bugfix: prepareNextSheet reverted to 0.1.4a-version, as the last sheet preparation broke.
-
 
 ###### v0.1.5a
 
