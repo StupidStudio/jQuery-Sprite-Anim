@@ -339,7 +339,7 @@ jQuery(function($) {
 		if (this.getNextSheetIdx() === this.getCurSheetIdx()) return;
 		
 		var newProp = 'url(' + this.baseurl + this.getNextSheetIdx() + '.png)';
-		var nextSheetEl = $(this.elem).children('div.sheet').eq( this.getNextSheetIdx() % 2 );
+		var nextSheetEl = $(this.elem).children('div.sheet').eq( (this.getCurSheetIdx() + 1) % 2 );
 		
 		if (nextSheetEl.css('background-image') === newProp) return;
 		
