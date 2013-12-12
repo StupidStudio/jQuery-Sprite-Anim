@@ -33,7 +33,7 @@ The MIT License. See LICENSE for further information.
 
 ### Easy: Use our tool
 
-You may use the webbased generator freely available at <http://sprite.smplr.com>. You can simply upload your images and have the tool generate the sprites for you.
+You may use the webbased generator freely available at <http://apps.stupid-studio.com>. You can simply upload your images and have the tool generate the sprites for you.
 
 
 ### Hard: Do It Yourself
