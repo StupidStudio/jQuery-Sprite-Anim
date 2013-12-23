@@ -463,6 +463,13 @@ jQuery(function($) {
 				case "forwards":
 					obj.forwards = args;
 					break;
+				
+				case "frame":
+					obj.curFrame = args;
+					obj.showCurrentFrame();
+					obj.stop();
+					obj.timer = null;
+					break;
 
 				default:
 					$.error("Invalid action.");
