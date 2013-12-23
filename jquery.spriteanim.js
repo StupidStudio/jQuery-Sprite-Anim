@@ -253,6 +253,9 @@ jQuery(function($) {
 	 * Start playing the animation.
 	 */
 	SpriteAnim.prototype.play = function() {
+		// prevent playing more than once
+		if (this.animationFrameId) return;
+
 		// fire the event and cancel, if event has been cancelled
 		var ev = $.Event('play');
 		$(this.elem).trigger(ev);
@@ -267,9 +270,9 @@ jQuery(function($) {
 	 */
 	SpriteAnim.prototype.doPlay = function() {
 		var self = this;
-		
-		// already running? then cancel that
-		window.clearInterval(this.timer);
+
+		// already running? cancel that to enable new fps
+		if (this.animationFrameId) this.stop();
 
 		// interval in milliseconds
 		var msInterval = Math.round(1000 / this.fps);
@@ -286,8 +289,7 @@ jQuery(function($) {
 		
 
 		var animFn = (function animloop() {
-			if (self.mustStop) { self.mustStop = false; return; }
-			requestAnimFrame(animFn);
+			this.animationFrameId = requestAnimationFrame(animFn);
 			if (!canPlayNextFrame()) return;
 			
 			// if the element no longer exist / is no longer injected in the DOM, then
@@ -395,7 +397,8 @@ jQuery(function($) {
 	 * Stop the animation.
 	 */
 	SpriteAnim.prototype.stop = function() {
-		this.mustStop = true;
+		if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+		this.animationFrameId = null;
 	};
 
 
@@ -448,12 +451,11 @@ jQuery(function($) {
 
 				case "stop":
 					obj.stop();
-					obj.timer = null;
 					break;
 
 				case "fps":
 					obj.fps = args;
-					if (obj.timer) obj.doPlay();   // was playing
+					if (obj.animationFrameId) obj.doPlay();   // was playing
 					break;
 
 				case "play":
@@ -465,10 +467,9 @@ jQuery(function($) {
 					break;
 				
 				case "frame":
+					obj.stop();
 					obj.curFrame = args;
 					obj.showCurrentFrame();
-					obj.stop();
-					obj.timer = null;
 					break;
 
 				default:
@@ -615,4 +616,27 @@ if(!Array.isArray) {
 
 // Thanks to Paul Irish
 // http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-window.requestAnimFrame = (function(){ return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function( callback ){ window.setTimeout(callback, 1000 / 60); }; })();
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+ 
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+ 
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
