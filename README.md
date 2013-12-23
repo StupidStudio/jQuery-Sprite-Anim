@@ -116,6 +116,14 @@ If the argument is true, the animation will play forwards. If false, it will pla
 
 If the animation is not playing, it will remain not playing.
 
+### frame
+
+Changes the animation frame and stops playback. You must supply a second argument with the intended frame. 
+
+Example:
+    
+    $('#mySpriteAnimation').spriteanim('frame', 16); 
+
 ## Javascript Events
 
 Various events are dispatched and can be used to finetune the animation as you please.
