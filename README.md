@@ -1,5 +1,5 @@
 # jQuery Sprite Anim
-#### Version 0.1.7
+#### Version 0.1.8
 
 
 ## Introduction
@@ -181,6 +181,16 @@ Please note: This may be triggered a lot, as loading occurs each time we change 
 
 
 ## Change log
+
+###### v0.1.8
+
+*Thanks to [NeilCross](https://github.com/NeilCross) with a perfect  [pull request](https://github.com/StupidStudio/jQuery-Sprite-Anim/pull/5), which solely makes up this revision.*
+
+A feature add and a few bug fixes:
+
+ * Add support for display of a specific frame, with the format .spriteanim('frame',n) to display frame n
+ * Fixed multiple calls to 'play' creating more than one executing loop, and resolved issue that FPS was not applied immediately; both as the timer object was never set.
+ * Make animations stop immediately, rather on next frame iteration - resolves issue with needing to call play twice twice after calling 'stop' twice.
 
 ###### v0.1.7
 
